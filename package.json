@@ -1,0 +1,67 @@
+{
+  "name": "codex-profile-manager",
+  "version": "0.1.0",
+  "description": "Desktop workspace for managing and switching Codex auth.json and config.toml profiles",
+  "main": "dist-electron/main.js",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "dist": "npm run build && electron-builder",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "electron",
+    "codex",
+    "profile-manager",
+    "desktop-app",
+    "auth-switcher"
+  ],
+  "author": "ChangTaoWang",
+  "license": "MIT",
+  "type": "commonjs",
+  "build": {
+    "appId": "com.codex.profilemanager",
+    "productName": "Codex Profile Manager",
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "signAndEditExecutable": false,
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
+    }
+  },
+  "dependencies": {
+    "@iarna/toml": "^2.2.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "electron": "^41.0.3",
+    "electron-builder": "^26.8.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.1",
+    "vite-plugin-electron": "^0.29.1"
+  }
+}
