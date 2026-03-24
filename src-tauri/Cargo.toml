@@ -1,6 +1,6 @@
 [package]
 name = "codex-profile-switcher"
-version = "0.2.0"
+version = "1.0.0"
 description = "A lightweight Tauri utility for switching Codex profiles"
 authors = ["ChangTaoWang"]
 edition = "2021"
