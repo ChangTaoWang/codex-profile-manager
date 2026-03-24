@@ -1,0 +1,22 @@
+[package]
+name = "codex-profile-switcher"
+version = "0.2.0"
+description = "A lightweight Tauri utility for switching Codex profiles"
+authors = ["ChangTaoWang"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+base64 = "0.22"
+chrono = { version = "0.4", features = ["clock", "serde"] }
+dirs = "6"
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+tauri = { version = "2", features = [] }
+thiserror = "2"
+toml = "0.8"
+uuid = { version = "1", features = ["v4"] }

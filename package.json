@@ -1,67 +1,37 @@
 {
-  "name": "codex-profile-manager",
-  "version": "0.1.0",
-  "description": "Desktop workspace for managing and switching Codex auth.json and config.toml profiles",
-  "main": "dist-electron/main.js",
+  "name": "codex-profile-switcher",
+  "version": "0.2.0",
+  "description": "A lightweight Tauri desktop utility for switching Codex auth.json and config.toml profiles",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 127.0.0.1 --port 1420",
     "build": "tsc --noEmit && vite build",
-    "dist": "npm run build && electron-builder",
-    "preview": "vite preview"
+    "preview": "vite preview --host 127.0.0.1 --port 1420",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "keywords": [
-    "electron",
+    "tauri",
     "codex",
-    "profile-manager",
+    "profile-switcher",
     "desktop-app",
-    "auth-switcher"
+    "auth-switch"
   ],
   "author": "ChangTaoWang",
   "license": "MIT",
-  "type": "commonjs",
-  "build": {
-    "appId": "com.codex.profilemanager",
-    "productName": "Codex Profile Manager",
-    "files": [
-      "dist/**/*",
-      "dist-electron/**/*",
-      "package.json"
-    ],
-    "directories": {
-      "output": "release"
-    },
-    "win": {
-      "signAndEditExecutable": false,
-      "target": [
-        "nsis"
-      ]
-    },
-    "mac": {
-      "target": [
-        "dmg"
-      ]
-    },
-    "linux": {
-      "target": [
-        "AppImage"
-      ]
-    }
-  },
   "dependencies": {
-    "@iarna/toml": "^2.2.5",
+    "@tauri-apps/api": "^2.0.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
-    "electron": "^41.0.3",
-    "electron-builder": "^26.8.1",
     "typescript": "^5.9.3",
-    "vite": "^8.0.1",
-    "vite-plugin-electron": "^0.29.1"
+    "vite": "^8.0.1"
   }
 }

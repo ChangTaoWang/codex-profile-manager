@@ -1,97 +1,94 @@
 import type { ProfileRecord } from '../../shared/contracts';
-import { formatTimestamp, getIdentityLabel, summarizeProfile } from '../utils/profile-ui';
+import { formatTimestamp, getProfileIdentity, getProfileSubtitle } from '../utils/profile-ui';
 
-interface ProfileDetailPanelProps {
+interface ProfileDetailModalProps {
   profile: ProfileRecord;
-  busySwitch: boolean;
   isCurrent: boolean;
+  busySwitch: boolean;
   onClose: () => void;
   onEdit: () => void;
   onDelete: () => void;
   onSwitch: () => void;
 }
 
-export function ProfileDetailPanel({
+export function ProfileDetailModal({
   profile,
-  busySwitch,
   isCurrent,
+  busySwitch,
   onClose,
   onEdit,
   onDelete,
   onSwitch,
-}: ProfileDetailPanelProps) {
+}: ProfileDetailModalProps) {
   return (
-    <section className="detail-panel">
-      <div className="detail-panel-card">
-        <div className="detail-panel-header">
+    <div className="modal-backdrop">
+      <section className="dialog-card dialog-card--detail">
+        <div className="dialog-head">
           <div>
             <p className="eyebrow">Profile Detail</p>
             <h3>{profile.name}</h3>
-            <p className="modal-subtitle">{getIdentityLabel(profile)}</p>
+            <p className="subtle-text">{getProfileIdentity(profile.summary)}</p>
           </div>
 
-          <button type="button" className="ghost-button" onClick={onClose}>
-            收起
+          <button type="button" className="button button--muted" onClick={onClose}>
+            关闭
           </button>
         </div>
 
-        <div className="detail-hero detail-hero--panel">
-          <span className={`badge ${isCurrent ? 'badge--current' : 'badge--muted'}`}>
-            {isCurrent ? '当前配置' : profile.source === 'captured' ? '当前快照' : '已保存 Profile'}
-          </span>
-          <p className="detail-note">{profile.note || '没有备注。'}</p>
+        <div className="detail-summary">
+          <div className="meta-grid">
+            <div className="meta-cell">
+              <span>状态</span>
+              <strong>{isCurrent ? '当前生效' : profile.summary.authLabel}</strong>
+            </div>
+            <div className="meta-cell">
+              <span>更新时间</span>
+              <strong>{formatTimestamp(profile.updatedAt)}</strong>
+            </div>
+            <div className="meta-cell">
+              <span>最近切换</span>
+              <strong>{formatTimestamp(profile.lastUsedAt)}</strong>
+            </div>
+            <div className="meta-cell">
+              <span>概览</span>
+              <strong>{getProfileSubtitle(profile.summary)}</strong>
+            </div>
+          </div>
+
+          <div className="note-box">
+            <span>备注</span>
+            <p>{profile.note || '没有备注。'}</p>
+          </div>
         </div>
 
-        <div className="summary-grid summary-grid--panel">
-          <SummaryItem label="账号" value={profile.summary.email ?? profile.summary.accountId ?? '未识别'} />
-          <SummaryItem label="模型" value={profile.summary.model ?? '未设置'} />
-          <SummaryItem label="计划" value={profile.summary.planType ?? '未设置'} />
-          <SummaryItem label="推理强度" value={profile.summary.reasoningEffort ?? '未设置'} />
-          <SummaryItem label="沙箱" value={profile.summary.sandboxMode ?? '未设置'} />
-          <SummaryItem label="更新时间" value={formatTimestamp(profile.updatedAt)} />
-        </div>
-
-        <div className="meta-chip-row">
-          {(profile.tags.length === 0 ? ['暂无标签'] : profile.tags).map((tag) => (
-            <span key={tag} className="chip chip--soft">
-              {tag === '暂无标签' ? tag : `#${tag}`}
-            </span>
-          ))}
-          <span className="chip chip--soft">{summarizeProfile(profile) || '基础摘要'}</span>
-        </div>
-
-        <div className="detail-actions detail-actions--panel">
-          <button type="button" className="secondary-button" onClick={onEdit}>
+        <div className="dialog-actions">
+          <button type="button" className="button button--muted" onClick={onEdit}>
             编辑
           </button>
-          <button type="button" className="ghost-button" onClick={onDelete}>
+          <button type="button" className="button button--muted" onClick={onDelete}>
             删除
           </button>
-          <button type="button" className="primary-button" onClick={onSwitch} disabled={busySwitch}>
+          <button type="button" className="button button--primary" disabled={busySwitch} onClick={onSwitch}>
             {busySwitch ? '切换中...' : isCurrent ? '重新写入当前' : '切换到当前'}
           </button>
         </div>
 
-        <div className="raw-stack">
-          <details className="raw-card">
-            <summary>`auth.json` 原始内容</summary>
+        <div className="code-stack">
+          <section className="code-card">
+            <div className="code-card-head">
+              <strong>auth.json</strong>
+            </div>
             <pre>{profile.authContent}</pre>
-          </details>
-          <details className="raw-card">
-            <summary>`config.toml` 原始内容</summary>
-            <pre>{profile.configContent}</pre>
-          </details>
-        </div>
-      </div>
-    </section>
-  );
-}
+          </section>
 
-function SummaryItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="summary-item">
-      <span>{label}</span>
-      <strong>{value}</strong>
+          <section className="code-card">
+            <div className="code-card-head">
+              <strong>config.toml</strong>
+            </div>
+            <pre>{profile.configContent}</pre>
+          </section>
+        </div>
+      </section>
     </div>
   );
 }

@@ -1,14 +1,14 @@
 export type ProfileSource = 'manual' | 'captured';
+export type MatchStatus = 'missing' | 'exact' | 'unknown';
 
 export interface ProfileSummary {
+  authLabel: string;
   authMode: string;
   email?: string;
   accountId?: string;
   planType?: string;
-  organizations: string[];
   model?: string;
   reasoningEffort?: string;
-  sandboxMode?: string;
   endpoint?: string;
   hasApiKey: boolean;
 }
@@ -17,7 +17,6 @@ export interface ProfileRecord {
   id: string;
   name: string;
   note: string;
-  tags: string[];
   source: ProfileSource;
   createdAt: string;
   updatedAt: string;
@@ -26,14 +25,6 @@ export interface ProfileRecord {
   authContent: string;
   configContent: string;
   summary: ProfileSummary;
-}
-
-export interface RecognitionResult {
-  status: 'missing' | 'exact' | 'likely' | 'unknown';
-  matchedProfileId?: string;
-  matchedProfileName?: string;
-  confidence: number;
-  reason: string;
 }
 
 export interface CurrentConfigState {
@@ -47,14 +38,16 @@ export interface CurrentConfigState {
   summary?: ProfileSummary;
   authContent?: string;
   configContent?: string;
-  recognition: RecognitionResult;
+  matchStatus: MatchStatus;
+  matchedProfileId?: string;
+  matchedProfileName?: string;
 }
 
 export interface AppSettings {
   codexHome: string;
   defaultCodexHome: string;
-  profilesPath: string;
-  settingsPath: string;
+  profilesDir: string;
+  statePath: string;
   backupsDir: string;
 }
 
@@ -64,23 +57,21 @@ export interface AppSnapshot {
   settings: AppSettings;
 }
 
-export interface SaveProfileInput {
+export interface ProfileInput {
   name: string;
   note?: string;
-  tags?: string[];
   authContent: string;
   configContent: string;
   source: ProfileSource;
 }
 
-export interface UpdateProfileInput extends SaveProfileInput {
+export interface UpdateProfileInput extends ProfileInput {
   id: string;
 }
 
 export interface CaptureCurrentInput {
   name: string;
   note?: string;
-  tags?: string[];
 }
 
 export interface SetCodexHomeInput {
@@ -90,18 +81,6 @@ export interface SetCodexHomeInput {
 export interface SwitchProfileResult {
   switchedAt: string;
   backupDir: string;
-  profile: ProfileRecord;
-  current: CurrentConfigState;
-}
-
-export interface CodexApi {
-  getAppState: () => Promise<AppSnapshot>;
-  createProfile: (input: SaveProfileInput) => Promise<AppSnapshot>;
-  captureCurrentProfile: (input: CaptureCurrentInput) => Promise<AppSnapshot>;
-  updateProfile: (input: UpdateProfileInput) => Promise<AppSnapshot>;
-  deleteProfile: (id: string) => Promise<AppSnapshot>;
-  switchProfile: (id: string) => Promise<SwitchProfileResult>;
-  setCodexHome: (input: SetCodexHomeInput) => Promise<AppSnapshot>;
-  openCodexHome: () => Promise<void>;
-  restartCodex: () => Promise<void>;
+  profileId: string;
+  profileName: string;
 }

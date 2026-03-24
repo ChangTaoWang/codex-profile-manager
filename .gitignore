@@ -1,7 +1,13 @@
 node_modules/
 dist/
 dist-electron/
-release/
+release/*
+!release/
+!release/*.exe
+!release/*.msi
+src-tauri/target/
+.codex_tmp_ref/
+.npm-cache/
 
 *.log
 npm-debug.log*
